@@ -43,6 +43,9 @@ trap 'err_handler "$LINENO" "$?"' ERR
 ####################################################################################################################################################################
 HOSTS=
 HOST_SELF=
+HADOOP_DIR=./hadoop
+HADOOP_MASTER_LIST="$HADOOP_DIR/conf/masters"
+HADOOP_SLAVE_LIST="$HADOOP_DIR/conf/slaves"
 ####################################################################################################################################################################
 
 
@@ -58,6 +61,17 @@ main() {
 
     remove_host "$SELF"
     stdout "Machines without own: ${HOSTS[@]}"
+
+    # Truncate masters file:
+    # The local machine is automatically selected as master.
+    # The purpose of the masters-list would be to add SECONDARY namenodes / jobtrackers - which we don't want.
+    > "$HADOOP_MASTER_LIST"
+
+    # Set all hosts except ourself as slave
+    > "$HADOOP_SLAVE_LIST"
+    for host in "${HOSTS[@]}" ; do
+	stdout "$host" >> "$HADOOP_SLAVE_LIST"
+    done
 }
 
 get_hosts() {
