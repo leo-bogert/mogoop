@@ -108,6 +108,16 @@ remove_host() {
     HOSTS=( "${new_hosts[@]}" )
 }
 
+# Inspired by http://mywiki.wooledge.org/BashFAQ/021
+# $1 = to replace (bash matching pattern)
+# $2 = replacement
+# $3 = input file
+replace_string_in_file() {
+	while IFS= read -r line; do
+		stdout "${line//"$1"/$2}"
+	done < "$3"
+}
+
 main "$@"
 
 ####################################################################################################################################################################
