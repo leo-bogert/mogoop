@@ -40,6 +40,12 @@ trap 'err_handler "$LINENO" "$?"' ERR
 ####################################################################################################################################################################
 # CONFIG
 ####################################################################################################################################################################
+HADOOP_DIR=./hadoop
+HADOOP_MASTER_LIST="$HADOOP_DIR/conf/masters"
+HADOOP_SLAVE_LIST="$HADOOP_DIR/conf/slaves"
+HADOOP_CORE_SITE_XML="$HADOOP_DIR/conf/core-site.xml"
+HADOOP_CORE_SITE_XML_TEMPLATE="./templates/hadoop-1.2.1/conf/core-site.xml"
+
 NO_DEDICATED_MASTER_HOST=1 # Don't use a separate machine for Jobtracker/Namenode
 ####################################################################################################################################################################
 
@@ -48,11 +54,6 @@ NO_DEDICATED_MASTER_HOST=1 # Don't use a separate machine for Jobtracker/Namenod
 ####################################################################################################################################################################
 HOSTS=
 HOST_SELF=
-HADOOP_DIR=./hadoop
-HADOOP_MASTER_LIST="$HADOOP_DIR/conf/masters"
-HADOOP_SLAVE_LIST="$HADOOP_DIR/conf/slaves"
-HADOOP_CORE_SITE_XML="$HADOOP_DIR/conf/core-site.xml"
-HADOOP_CORE_SITE_XML_TEMPLATE="./templates/hadoop-1.2.1/conf/core-site.xml"
 ####################################################################################################################################################################
 
 
