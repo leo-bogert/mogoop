@@ -87,7 +87,7 @@ main() {
     done
     
 	# Set ourself as namenode
-	sed "s/MOGOOP_NAMENODE/$SELF/g" "$HADOOP_CORE_SITE_XML_TEMPLATE" > "$HADOOP_CORE_SITE_XML"
+	replace_string_in_file 'MOGOOP_NAMENODE' "$SELF" "$HADOOP_CORE_SITE_XML_TEMPLATE" > "$HADOOP_CORE_SITE_XML"
 }
 
 get_hosts() {
