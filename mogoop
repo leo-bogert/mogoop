@@ -51,6 +51,8 @@ HOST_SELF=
 HADOOP_DIR=./hadoop
 HADOOP_MASTER_LIST="$HADOOP_DIR/conf/masters"
 HADOOP_SLAVE_LIST="$HADOOP_DIR/conf/slaves"
+HADOOP_CORE_SITE_XML="$HADOOP_DIR/conf/core-site.xml"
+HADOOP_CORE_SITE_XML_TEMPLATE="./templates/hadoop-1.2.1/conf/core-site.xml"
 ####################################################################################################################################################################
 
 
@@ -82,6 +84,9 @@ main() {
     for host in "${HOSTS[@]}" ; do
 	stdout "$host" >> "$HADOOP_SLAVE_LIST"
     done
+    
+	# Set ourself as namenode
+	sed "s/MOGOOP_NAMENODE/$SELF/g" "$HADOOP_CORE_SITE_XML_TEMPLATE" > "$HADOOP_CORE_SITE_XML"
 }
 
 get_hosts() {
