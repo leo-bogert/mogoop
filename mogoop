@@ -1,0 +1,107 @@
+#!/bin/bash
+####################################################################################################################################################################
+# UTILITY FUNCTIONS
+####################################################################################################################################################################
+secho() { # The "echo" builtin should not be used with arbitrary strings since it does not support termination of the parameter list
+    printf '%s\n' "$*"
+}
+
+stdout() {
+    secho "$@" >&1
+}
+
+stderr() {
+    secho "$@" >&2
+}
+
+die() {
+    stderr 'ERROR:' "$@"
+    exit 1
+}
+
+err_handler() {
+    die "error at line $1, last exit code is $2" 
+}
+####################################################################################################################################################################
+
+
+####################################################################################################################################################################
+# SHELL PARAMETERS
+####################################################################################################################################################################
+set -o nounset
+set -o pipefail
+set -o errexit
+set -o errtrace
+shopt -s nullglob
+shopt -s failglob
+trap 'err_handler "$LINENO" "$?"' ERR
+####################################################################################################################################################################
+
+####################################################################################################################################################################
+# CONFIG
+####################################################################################################################################################################
+NO_DEDICATED_MASTER_HOST=1 # Don't use a separate machine for Jobtracker/Namenode
+####################################################################################################################################################################
+
+####################################################################################################################################################################
+# GLOBALS
+####################################################################################################################################################################
+HOSTS=
+HOST_SELF=
+HADOOP_DIR=./hadoop
+HADOOP_MASTER_LIST="$HADOOP_DIR/conf/masters"
+HADOOP_SLAVE_LIST="$HADOOP_DIR/conf/slaves"
+####################################################################################################################################################################
+
+
+####################################################################################################################################################################
+# THE ACTUAL CODE
+####################################################################################################################################################################
+
+main() {
+    get_hosts
+
+    stdout "Machines: ${HOSTS[@]}"
+    stdout "Jobtracker / Namenode: $SELF"
+
+    # If configured, don't dedicate the whole local machine as Jobtracker/Namenode.
+    # It typically has 64 cores at Mogon which is quite a lot.
+    if [ "$NO_DEDICATED_MASTER_HOST" -eq 0 ] ; then
+	remove_host "$SELF"
+    fi
+
+    # Truncate masters file:
+    # The local machine is automatically selected as master.
+    # The purpose of the masters-list would be to add SECONDARY namenodes / jobtrackers - which we don't want.
+    > "$HADOOP_MASTER_LIST"
+    stdout "Secondary namenodes:" "$(<"$HADOOP_MASTER_LIST")"
+
+    # Set all remaining hosts as slave
+    stdout "Worker machines: ${HOSTS[@]}"
+    > "$HADOOP_SLAVE_LIST"
+    for host in "${HOSTS[@]}" ; do
+	stdout "$host" >> "$HADOOP_SLAVE_LIST"
+    done
+}
+
+get_hosts() {
+    # Get all hosts of the LSF job
+    read -ra HOSTS <<< "$LSB_HOSTS"
+    # Get host where this script is running
+    SELF="$(hostname --short)" # --short removes the domain name, which get_hosts_sorted won't include
+}
+
+remove_host() {
+    local to_remove="$1"
+    local new_hosts=( )
+
+    for host in "${HOSTS[@]}" ; do
+	[ "$host" != "$to_remove" ] && new_hosts+=( "$host" )
+    done
+
+    HOSTS=( "${new_hosts[@]}" )
+}
+
+main "$@"
+
+####################################################################################################################################################################
