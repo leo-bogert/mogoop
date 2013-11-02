@@ -37,6 +37,11 @@ shopt -s failglob
 trap 'err_handler "$LINENO" "$?"' ERR
 ####################################################################################################################################################################
 
+####################################################################################################################################################################
+# CONFIG
+####################################################################################################################################################################
+NO_DEDICATED_MASTER_HOST=1 # Don't use a separate machine for Jobtracker/Namenode
+####################################################################################################################################################################
 
 ####################################################################################################################################################################
 # GLOBALS
@@ -57,17 +62,22 @@ main() {
     get_hosts
 
     stdout "Machines: ${HOSTS[@]}"
-    stdout "Own machine: $SELF"
+    stdout "Jobtracker / Namenode: $SELF"
 
-    remove_host "$SELF"
-    stdout "Machines without own: ${HOSTS[@]}"
+    # If configured, don't dedicate the whole local machine as Jobtracker/Namenode.
+    # It typically has 64 cores at Mogon which is quite a lot.
+    if [ "$NO_DEDICATED_MASTER_HOST" -eq 0 ] ; then
+	remove_host "$SELF"
+    fi
 
     # Truncate masters file:
     # The local machine is automatically selected as master.
     # The purpose of the masters-list would be to add SECONDARY namenodes / jobtrackers - which we don't want.
     > "$HADOOP_MASTER_LIST"
+    stdout "Secondary namenodes:" "$(<"$HADOOP_MASTER_LIST")"
 
-    # Set all hosts except ourself as slave
+    # Set all remaining hosts as slave
+    stdout "Worker machines: ${HOSTS[@]}"
     > "$HADOOP_SLAVE_LIST"
     for host in "${HOSTS[@]}" ; do
 	stdout "$host" >> "$HADOOP_SLAVE_LIST"
