@@ -40,13 +40,17 @@ trap 'err_handler "$LINENO" "$?"' ERR
 ####################################################################################################################################################################
 # CONFIG
 ####################################################################################################################################################################
-HADOOP_DIR=./hadoop
+MOGOOP_DIR=~/mogoop
+NO_DEDICATED_MASTER_HOST=1 # Don't use a separate machine for Jobtracker/Namenode
+NAMENODE_DATA_DIR="$MOGOOP_DIR/namenode-data"
+
+HADOOP_DIR="$MOGOOP_DIR/hadoop"
 HADOOP_MASTER_LIST="$HADOOP_DIR/conf/masters"
 HADOOP_SLAVE_LIST="$HADOOP_DIR/conf/slaves"
 HADOOP_CORE_SITE_XML="$HADOOP_DIR/conf/core-site.xml"
 HADOOP_CORE_SITE_XML_TEMPLATE="./templates/hadoop-1.2.1/conf/core-site.xml"
-
-NO_DEDICATED_MASTER_HOST=1 # Don't use a separate machine for Jobtracker/Namenode
+HADOOP_HDFS_SITE_XML="$HADOOP_DIR/conf/hdfs-site.xml"
+HADOOP_HDFS_SITE_XML_TEMPLATE="./templates/hadoop-1.2.1/conf/hdfs-site.xml"
 ####################################################################################################################################################################
 
 ####################################################################################################################################################################
