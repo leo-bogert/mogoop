@@ -2,6 +2,7 @@ mogoop
 ======
 
 A script to dynamically create a temporary Hadoop cluster as a batch job to run on IBM Platform LSF.
+Pre-configured to work with the "Mogon" cluster of the university of Mainz.
 
 Execution
 =========
@@ -40,3 +41,9 @@ Execute the following on your Mogon shell. It will:
 	gpg --list-keys    # initializes gpg in case you have not used it yet.
 	gpg --recv-key 785436A782586B71829C67A04169AA27ECB31663
 	gpg --verify hadoop-1.2.1.tar.gz.asc && tar xzf hadoop-1.2.1.tar.gz && ln -s hadoop-1.2.1/ hadoop
+
+Security
+========
+
+There is no security at the moment! Anyone on the same network can access the cluster!
+BE CAREFUL!
