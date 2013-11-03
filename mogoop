@@ -40,6 +40,7 @@ trap 'err_handler "$LINENO" "$?"' ERR
 ####################################################################################################################################################################
 # CONFIG
 ####################################################################################################################################################################
+JAVA_HOME=/usr/lib/jvm/jre-1.7.0-openjdk.x86_64
 MOGOOP_DIR=~/mogoop
 NO_DEDICATED_MASTER_HOST=1 # Don't use a separate machine for Jobtracker/Namenode
 PER_NODE_MAPPER_CORES=60	# TODO: Auto-config per machine via LSB_MCPU_HOSTS or estimate globally by taking LSB_DJOB_NUMPROC and dividing it by number of hosts
@@ -112,6 +113,8 @@ main() {
 	replace_string_in_file 'MOGOOP_MAPRED_DATA_DIR' "$MAPRED_DATA_DIR" "$HADOOP_MAPRED_SITE_XML.temp1" > "$HADOOP_MAPRED_SITE_XML.temp2"
 	replace_string_in_file 'MOGOOP_PER_NODE_MAPPER_CORES' "$PER_NODE_MAPPER_CORES" "$HADOOP_MAPRED_SITE_XML.temp2" > "$HADOOP_MAPRED_SITE_XML.temp3"
 	replace_string_in_file 'MOGOOP_PER_NODE_REDUCER_CORES' "$PER_NODE_REDUCER_CORES" "$HADOOP_MAPRED_SITE_XML.temp3" > "$HADOOP_MAPRED_SITE_XML"
+	
+	export JAVA_HOME
 }
 
 get_hosts() {
