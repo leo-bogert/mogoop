@@ -76,28 +76,28 @@ HOST_SELF=
 ####################################################################################################################################################################
 
 main() {
-    get_hosts
+	get_hosts
 
-    stdout "Machines: ${HOSTS[@]}"
-    stdout "Jobtracker / Namenode: $SELF"
+	stdout "Machines: ${HOSTS[@]}"
+	stdout "Jobtracker / Namenode: $SELF"
 
-    # If configured, don't dedicate the whole local machine as Jobtracker/Namenode.
-    # It typically has 64 cores at Mogon which is quite a lot.
-    if [ "$NO_DEDICATED_MASTER_HOST" -eq 0 ] ; then
-	remove_host "$SELF"
-    fi
+	# If configured, don't dedicate the whole local machine as Jobtracker/Namenode.
+	# It typically has 64 cores at Mogon which is quite a lot.
+	if [ "$NO_DEDICATED_MASTER_HOST" -eq 0 ] ; then
+		remove_host "$SELF"
+	fi
 
-    # Truncate masters file:
-    # The local machine is automatically selected as master.
-    # The purpose of the masters-list would be to add SECONDARY namenodes / jobtrackers - which we don't want.
-    > "$HADOOP_MASTER_LIST"
-    stdout "Secondary namenodes:" "$(<"$HADOOP_MASTER_LIST")"
+	# Truncate masters file:
+	# The local machine is automatically selected as master.
+	# The purpose of the masters-list would be to add SECONDARY namenodes / jobtrackers - which we don't want.
+	> "$HADOOP_MASTER_LIST"
+	stdout "Secondary namenodes:" "$(<"$HADOOP_MASTER_LIST")"
 
-    # Set all remaining hosts as slave
-    stdout "Worker machines: ${HOSTS[@]}"
-    > "$HADOOP_SLAVE_LIST"
-    for host in "${HOSTS[@]}" ; do
-	stdout "$host" >> "$HADOOP_SLAVE_LIST"
+	# Set all remaining hosts as slave
+	stdout "Worker machines: ${HOSTS[@]}"
+	> "$HADOOP_SLAVE_LIST"
+	for host in "${HOSTS[@]}" ; do
+		stdout "$host" >> "$HADOOP_SLAVE_LIST"
     done
     
 	# core-site.xml: Set ourself as namenode
@@ -115,21 +115,21 @@ main() {
 }
 
 get_hosts() {
-    # Get all hosts of the LSF job
-    read -ra HOSTS <<< "$LSB_HOSTS"
-    # Get host where this script is running
-    SELF="$(hostname --short)" # --short removes the domain name, which get_hosts_sorted won't include
+	# Get all hosts of the LSF job
+	read -ra HOSTS <<< "$LSB_HOSTS"
+	# Get host where this script is running
+	SELF="$(hostname --short)" # --short removes the domain name, which get_hosts_sorted won't include
 }
 
 remove_host() {
-    local to_remove="$1"
-    local new_hosts=( )
+	local to_remove="$1"
+	local new_hosts=( )
 
     for host in "${HOSTS[@]}" ; do
-	[ "$host" != "$to_remove" ] && new_hosts+=( "$host" )
-    done
+		[ "$host" != "$to_remove" ] && new_hosts+=( "$host" )
+	done
 
-    HOSTS=( "${new_hosts[@]}" )
+	HOSTS=( "${new_hosts[@]}" )
 }
 
 # Inspired by http://mywiki.wooledge.org/BashFAQ/021
