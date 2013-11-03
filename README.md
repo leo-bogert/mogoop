@@ -6,6 +6,7 @@ A script to dynamically create a temporary Hadoop cluster as a batch job to run 
 Setup
 =====
 
+	cd ~	# Please edit the "mogoop" script if you use a different directory!
 	git clone https://github.com/leo-bogert/mogoop.git
 	cd mogoop
 	wget http://www.eu.apache.org/dist/hadoop/common/stable/hadoop-1.2.1.tar.gz
