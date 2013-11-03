@@ -73,7 +73,7 @@ HOST_SELF=
 
 # Schedules main_node() to be run via LSF' bsub. Takes care of proper memory settings
 main() {
-	if [ $# -lt 1 ] || [[ "$1" != *[!0-9]* ]] ; then
+	if [ "$#" -lt 1 ] || [[ "$1" != *[0-9]* ]] ; then
 		die "Syntax: $0 number_of_cluster_nodes"
 	fi
 	
