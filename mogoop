@@ -46,13 +46,6 @@ NO_DEDICATED_MASTER_HOST=1 # Don't use a separate machine for Jobtracker/Namenod
 PER_NODE_MAPPER_CORES=60	# TODO: Auto-config per machine. The HOSTS array already stores CPU count for each.
 PER_NODE_REDUCER_CORES=60	# TODO: Auto-config per machine. The HOSTS array already stores CPU count for each.
 
-# See https://mogon.zdv.uni-mainz.de/dokuwiki/local_scratch
-LSF_JOB_TEMP_DIR="/jobdir/$LSB_JOBID"
-
-NAMENODE_DATA_DIR="$LSF_JOB_TEMP_DIR/namenode-data"
-DATANODE_DATA_DIR="$LSF_JOB_TEMP_DIR/datanode-data"
-MAPRED_DATA_DIR="$LSF_JOB_TEMP_DIR/mapred-data"
-
 HADOOP_DIR="$MOGOOP_DIR/hadoop"
 HADOOP_MASTER_LIST="$HADOOP_DIR/conf/masters"
 HADOOP_SLAVE_LIST="$HADOOP_DIR/conf/slaves"
@@ -119,6 +112,13 @@ main_node() {
 	for host in "${!HOSTS[@]}" ; do
 		stdout "$host" >> "$HADOOP_SLAVE_LIST"
 	done
+
+	# See https://mogon.zdv.uni-mainz.de/dokuwiki/local_scratch
+	local LSF_JOB_TEMP_DIR="/jobdir/$LSB_JOBID"
+
+	local NAMENODE_DATA_DIR="$LSF_JOB_TEMP_DIR/namenode-data"
+	local DATANODE_DATA_DIR="$LSF_JOB_TEMP_DIR/datanode-data"
+	local MAPRED_DATA_DIR="$LSF_JOB_TEMP_DIR/mapred-data"
     
 	# core-site.xml: Set ourself as namenode
 	replace_string_in_file 'MOGOOP_NAMENODE' "$SELF" "$HADOOP_CORE_SITE_XML_TEMPLATE" > "$HADOOP_CORE_SITE_XML"
