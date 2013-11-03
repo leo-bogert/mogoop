@@ -98,7 +98,7 @@ main() {
 	> "$HADOOP_SLAVE_LIST"
 	for host in "${HOSTS[@]}" ; do
 		stdout "$host" >> "$HADOOP_SLAVE_LIST"
-    done
+	done
     
 	# core-site.xml: Set ourself as namenode
 	replace_string_in_file 'MOGOOP_NAMENODE' "$SELF" "$HADOOP_CORE_SITE_XML_TEMPLATE" > "$HADOOP_CORE_SITE_XML"
