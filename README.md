@@ -19,4 +19,8 @@ Setup
 Execution
 =========
 
-	bsub -I -n 64 -R 'span[ptile=64]' -app Reserve1800M -q long ./mogoop
+You can obtain a Hadoop cluster which reserves all CPUs and all memory of 3 Mogon nodes via:
+
+	./mogoop 3
+	
+Each node has 64 processors and 115 GB of RAM for your processing.
