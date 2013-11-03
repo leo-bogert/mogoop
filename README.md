@@ -19,6 +19,7 @@ This will submit a batch job which:
 - shuts down the cluster and erases it (including hdfs!) if you exit the shell via "exit".
 
 You can prove that the cluster is working by entering the following into the shell:
+
 	# List the contents of HDFS.
 	hadoop fs -ls /
 	# List currently running jobs.
