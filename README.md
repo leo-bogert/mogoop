@@ -3,20 +3,6 @@ mogoop
 
 A script to dynamically create a temporary Hadoop cluster as a batch job to run on IBM Platform LSF.
 
-Setup
-=====
-
-	cd ~	# Please edit the "mogoop" script if you use a different directory!
-	git clone https://github.com/leo-bogert/mogoop.git
-	cd mogoop
-	wget http://www.eu.apache.org/dist/hadoop/common/stable/hadoop-1.2.1.tar.gz
-	wget http://www.eu.apache.org/dist/hadoop/common/stable/hadoop-1.2.1.tar.gz.asc
-	gpg --list-keys # initializes gpg in case you have not used it yet.
-	gpg --recv-key 785436A782586B71829C67A04169AA27ECB31663
-	gpg --verify hadoop-1.2.1.tar.gz.asc
-	tar xzf hadoop-1.2.1.tar.gz
-	ln -s hadoop-1.2.1/ hadoop
-
 Execution
 =========
 
@@ -38,3 +24,19 @@ You can prove that the cluster is working by entering the following into the she
 	hadoop job -list
 
 The file system and the job list will be pretty empty of course but the fact that the listings succeed proves that the cluster is fine.
+
+Setup
+=====
+Execute the following on your Mogon shell. It will:
+- Download Mogoop
+- Download the Hadoop binaries from the official website and check their GPG signature
+- Leave you in the directory "~/mogoop" where you can execute ./mogoop
+
+	cd ~	# Please edit the "mogoop" script if you use a different directory!
+	git clone https://github.com/leo-bogert/mogoop.git
+	cd mogoop
+	wget http://www.eu.apache.org/dist/hadoop/common/stable/hadoop-1.2.1.tar.gz
+	wget http://www.eu.apache.org/dist/hadoop/common/stable/hadoop-1.2.1.tar.gz.asc
+	gpg --list-keys # initializes gpg in case you have not used it yet.
+	gpg --recv-key 785436A782586B71829C67A04169AA27ECB31663
+	gpg --verify hadoop-1.2.1.tar.gz.asc && tar xzf hadoop-1.2.1.tar.gz && ln -s hadoop-1.2.1/ hadoop
