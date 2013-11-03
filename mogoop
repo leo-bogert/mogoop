@@ -143,7 +143,7 @@ main_node() {
 	stdout "Hadoop cluster running. Opening shell so you can use it."
 	stdout "Exit the shell to terminate the Hadoop cluster."
 
-	bash -i
+	PATH="$PATH:$HADOOP_DIR/bin" bash -i || true
 
 	"$HADOOP_DIR/bin/stop-mapred.sh"
 	"$HADOOP_DIR/bin/stop-dfs.sh"
