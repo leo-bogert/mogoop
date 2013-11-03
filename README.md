@@ -19,4 +19,4 @@ Setup
 Execution
 =========
 
-	bsub -I -n 64 -R 'span[ptile=64]' -q long ./mogoop
+	bsub -I -n 64 -R 'span[ptile=64]' -app Reserve1800M -q long ./mogoop
