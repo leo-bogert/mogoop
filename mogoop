@@ -115,6 +115,15 @@ main() {
 	replace_string_in_file 'MOGOOP_PER_NODE_REDUCER_CORES' "$PER_NODE_REDUCER_CORES" "$HADOOP_MAPRED_SITE_XML.temp3" > "$HADOOP_MAPRED_SITE_XML"
 	
 	export JAVA_HOME
+
+	"$HADOOP_DIR/bin/start-dfs.sh"
+
+	stdout "Hadoop cluster running. Opening shell so you can use it."
+	stdout "Exit the shell to terminate the Hadoop cluster."
+
+	bash -i
+
+	"$HADOOP_DIR/bin/stop-dfs.sh"
 }
 
 get_hosts() {
