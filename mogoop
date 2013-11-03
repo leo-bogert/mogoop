@@ -100,13 +100,11 @@ main() {
 	stdout "$host" >> "$HADOOP_SLAVE_LIST"
     done
     
-	# Set ourself as namenode
+	# core-site.xml: Set ourself as namenode
 	replace_string_in_file 'MOGOOP_NAMENODE' "$SELF" "$HADOOP_CORE_SITE_XML_TEMPLATE" > "$HADOOP_CORE_SITE_XML"
 	
-	# Set namenode data dir
+	# hdfs-site.xml: Set namenode / datanode data dir
 	replace_string_in_file 'MOGOOP_NAMENODE_DATA_DIR' "$NAMENODE_DATA_DIR" "$HADOOP_HDFS_SITE_XML_TEMPLATE" > "$HADOOP_HDFS_SITE_XML.temp"
-	
-	# Set datanode data dir
 	replace_string_in_file 'MOGOOP_DATANODE_DATA_DIR' "$DATANODE_DATA_DIR" "$HADOOP_HDFS_SITE_XML.temp" > "$HADOOP_HDFS_SITE_XML"
 	
 	# mapred-site.xml: Set ourself as jobtracker, data dir for mappers/reducers to tempspace, and number of mapper/reducer cores per node.
