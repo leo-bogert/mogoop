@@ -44,10 +44,10 @@ MOGOOP_DIR=~/mogoop
 NO_DEDICATED_MASTER_HOST=1 # Don't use a separate machine for Jobtracker/Namenode
 
 # See https://mogon.zdv.uni-mainz.de/dokuwiki/local_scratch
-MOGON_TEMP_JOB_DIR="/jobdir/$LSB_JOBID"
+LSF_JOB_TEMP_DIR="/jobdir/$LSB_JOBID"
 
-NAMENODE_DATA_DIR="$LSF_JOB_TEMPDIR/namenode-data"
-DATANODE_DATA_DIR="$LSF_JOB_TEMPDIR/datanode-data"
+NAMENODE_DATA_DIR="$LSF_JOB_TEMP_DIR/namenode-data"
+DATANODE_DATA_DIR="$LSF_JOB_TEMP_DIR/datanode-data"
 
 HADOOP_DIR="$MOGOOP_DIR/hadoop"
 HADOOP_MASTER_LIST="$HADOOP_DIR/conf/masters"
