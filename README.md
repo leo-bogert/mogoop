@@ -28,11 +28,7 @@ The file system and the job list will be pretty empty of course but the fact tha
 
 Setup
 =====
-Execute the following on your Mogon shell. It will:
-- Download Mogoop
-- Download the Hadoop binaries from the official website and check their GPG signature
-- Leave you in the directory "~/mogoop" where you can execute ./mogoop
-
+Execute the following on your Mogon shell:
 	cd ~   # Please edit the "mogoop" script if you use a different directory!
 	git clone https://github.com/leo-bogert/mogoop.git
 	cd mogoop
@@ -41,6 +37,11 @@ Execute the following on your Mogon shell. It will:
 	gpg --list-keys    # initializes gpg in case you have not used it yet.
 	gpg --recv-key 785436A782586B71829C67A04169AA27ECB31663
 	gpg --verify hadoop-1.2.1.tar.gz.asc && tar xzf hadoop-1.2.1.tar.gz && ln -s hadoop-1.2.1/ hadoop
+
+It will:
+- Download Mogoop
+- Download the Hadoop binaries from the official website and check their GPG signature
+- Leave you in the directory "~/mogoop" where you can execute ./mogoop
 
 Security
 ========
