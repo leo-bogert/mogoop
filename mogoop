@@ -42,8 +42,8 @@ trap 'err_handler "$LINENO" "$?"' ERR
 ####################################################################################################################################################################
 MOGOOP_DIR=~/mogoop
 NO_DEDICATED_MASTER_HOST=1 # Don't use a separate machine for Jobtracker/Namenode
-PER_NODE_MAPPER_CORES=60
-PER_NODE_REDUCER_CORES=60
+PER_NODE_MAPPER_CORES=60	# TODO: Auto-config per machine via LSB_MCPU_HOSTS or estimate globally by taking LSB_DJOB_NUMPROC and dividing it by number of hosts
+PER_NODE_REDUCER_CORES=60	# TODO: Auto-config per machine via LSB_MCPU_HOSTS or estimate globally by taking LSB_DJOB_NUMPROC  and dividing it by number of hosts
 
 # See https://mogon.zdv.uni-mainz.de/dokuwiki/local_scratch
 LSF_JOB_TEMP_DIR="/jobdir/$LSB_JOBID"
