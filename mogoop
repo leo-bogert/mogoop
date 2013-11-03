@@ -142,7 +142,7 @@ main_node() {
 
 	export HADOOP_INSTALL
 
-	"$HADOOP_INSTALL/bin/hadoop" namenode -format
+	"$HADOOP_INSTALL/bin/hadoop" namenode -format -force
 
 	"$HADOOP_INSTALL/bin/start-dfs.sh"
 	"$HADOOP_INSTALL/bin/start-mapred.sh"
