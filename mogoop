@@ -47,15 +47,15 @@ PER_NODE_MAPPER_CORES=60	# TODO: Auto-config per machine. The HOSTS array alread
 PER_NODE_REDUCER_CORES=60	# TODO: Auto-config per machine. The HOSTS array already stores CPU count for each.
 
 HADOOP_INSTALL="$MOGOOP_DIR/hadoop"
-HADOOP_MASTER_LIST="$HADOOP_DIR/conf/masters"
-HADOOP_SLAVE_LIST="$HADOOP_DIR/conf/slaves"
-HADOOP_CORE_SITE_XML="$HADOOP_DIR/conf/core-site.xml"
+HADOOP_MASTER_LIST="$HADOOP_INSTALL/conf/masters"
+HADOOP_SLAVE_LIST="$HADOOP_INSTALL/conf/slaves"
+HADOOP_CORE_SITE_XML="$HADOOP_INSTALL/conf/core-site.xml"
 HADOOP_CORE_SITE_XML_TEMPLATE="./templates/hadoop-1.2.1/conf/core-site.xml"
-HADOOP_HDFS_SITE_XML="$HADOOP_DIR/conf/hdfs-site.xml"
+HADOOP_HDFS_SITE_XML="$HADOOP_INSTALL/conf/hdfs-site.xml"
 HADOOP_HDFS_SITE_XML_TEMPLATE="./templates/hadoop-1.2.1/conf/hdfs-site.xml"
-HADOOP_MAPRED_SITE_XML="$HADOOP_DIR/conf/mapred-site.xml"
+HADOOP_MAPRED_SITE_XML="$HADOOP_INSTALL/conf/mapred-site.xml"
 HADOOP_MAPRED_SITE_XML_TEMPLATE="./templates/hadoop-1.2.1/conf/mapred-site.xml"
-HADOOP_ENV_SH="$HADOOP_DIR/conf/hadoop-env.sh"
+HADOOP_ENV_SH="$HADOOP_INSTALL/conf/hadoop-env.sh"
 HADOOP_ENV_SH_TEMPLATE="./templates/hadoop-1.2.1/conf/hadoop-env.sh"
 ####################################################################################################################################################################
 
@@ -138,17 +138,17 @@ main_node() {
 
 	export HADOOP_INSTALL
 
-	"$HADOOP_DIR/bin/start-dfs.sh"
-	"$HADOOP_DIR/bin/start-mapred.sh"
+	"$HADOOP_INSTALL/bin/start-dfs.sh"
+	"$HADOOP_INSTALL/bin/start-mapred.sh"
 
 	stdout ""
 	stdout "Hadoop cluster running. Opening shell so you can use it."
 	stdout "Exit the shell to terminate the Hadoop cluster."
 
-	PATH="$PATH:$HADOOP_DIR/bin" bash -i || true
+	PATH="$PATH:$HADOOP_INSTALL/bin" bash -i || true
 
-	"$HADOOP_DIR/bin/stop-mapred.sh"
-	"$HADOOP_DIR/bin/stop-dfs.sh"
+	"$HADOOP_INSTALL/bin/stop-mapred.sh"
+	"$HADOOP_INSTALL/bin/stop-dfs.sh"
 }
 
 get_hosts() {
