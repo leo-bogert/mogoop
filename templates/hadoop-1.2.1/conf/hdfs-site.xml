@@ -4,9 +4,6 @@
 <!-- Put site-specific property overrides in this file. -->
 
 <configuration>
-<!-- hdfs-site.xml -->
-<configuration>
-
 <property>
 	<name>dfs.name.dir</name>
 	<value>MOGOOP_NAMENODE_DATA_DIR</value>
@@ -18,5 +15,4 @@
 	<value>MOGOOP_DATANODE_DATA_DIR</value>
 	<final>true</final>
 </property>
-
 </configuration>
