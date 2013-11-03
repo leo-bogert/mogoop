@@ -46,7 +46,7 @@ NO_DEDICATED_MASTER_HOST=1 # Don't use a separate machine for Jobtracker/Namenod
 PER_NODE_MAPPER_CORES=60	# TODO: Auto-config per machine. The HOSTS array already stores CPU count for each.
 PER_NODE_REDUCER_CORES=60	# TODO: Auto-config per machine. The HOSTS array already stores CPU count for each.
 
-HADOOP_DIR="$MOGOOP_DIR/hadoop"
+HADOOP_INSTALL="$MOGOOP_DIR/hadoop"
 HADOOP_MASTER_LIST="$HADOOP_DIR/conf/masters"
 HADOOP_SLAVE_LIST="$HADOOP_DIR/conf/slaves"
 HADOOP_CORE_SITE_XML="$HADOOP_DIR/conf/core-site.xml"
@@ -135,6 +135,8 @@ main_node() {
 	
 	# hadoop-env.sh: Set JAVA_HOME. As of 2013-11-03, I tried using "export JAVA_HOME" but Hadoop didn't eat it.
 	replace_string_in_file 'MOGOOP_JAVA_HOME' "$JAVA_HOME" "$HADOOP_ENV_SH_TEMPLATE" > "$HADOOP_ENV_SH"
+
+	export HADOOP_INSTALL
 
 	"$HADOOP_DIR/bin/start-dfs.sh"
 	"$HADOOP_DIR/bin/start-mapred.sh"
