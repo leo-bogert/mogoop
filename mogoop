@@ -119,6 +119,10 @@ main_node() {
 	local NAMENODE_DATA_DIR="$LSF_JOB_TEMP_DIR/namenode-data"
 	local DATANODE_DATA_DIR="$LSF_JOB_TEMP_DIR/datanode-data"
 	local MAPRED_DATA_DIR="$LSF_JOB_TEMP_DIR/mapred-data"
+
+	mkdir "$NAMENODE_DATA_DIR"
+	mkdir "$DATANODE_DATA_DIR"
+	mkdir "$MAPRED_DATA_DIR"
     
 	# core-site.xml: Set ourself as namenode
 	replace_string_in_file 'MOGOOP_NAMENODE' "$SELF" "$HADOOP_CORE_SITE_XML_TEMPLATE" > "$HADOOP_CORE_SITE_XML"
