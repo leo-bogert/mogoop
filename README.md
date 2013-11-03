@@ -29,6 +29,7 @@ The file system and the job list will be pretty empty of course but the fact tha
 Setup
 =====
 Execute the following on your Mogon shell:
+
 	cd ~   # Please edit the "mogoop" script if you use a different directory!
 	git clone https://github.com/leo-bogert/mogoop.git
 	cd mogoop
