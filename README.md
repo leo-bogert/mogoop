@@ -23,5 +23,18 @@ Execution
 You can obtain a Hadoop cluster which reserves all CPUs and all memory of 3 Mogon nodes via:
 
 	./mogoop 3
-	
-Each node has 64 processors and 115 GB of RAM for your processing.
+
+This will submit a batch job which:
+- allocates the requested amount of nodes. Each node has 64 processors and 115 GB of RAM for your processing.
+- Auto-configures Hadoop from scratch. You don't have to edit any config files!
+- formats the HDFS on temporary local storage.
+- opens a bash shell so you can use the cluster via the "hadoop" command.
+- shuts down the cluster and erases it (including hdfs!) if you exit the shell via "exit".
+
+You can prove that the cluster is working by entering the following into the shell:
+	# List the contents of HDFS.
+	hadoop fs -ls /
+	# List currently running jobs.
+	hadoop job -list
+
+The file system and the job list will be pretty empty of course but the fact that the listings succeed proves that the cluster is fine.
