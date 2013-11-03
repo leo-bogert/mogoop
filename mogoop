@@ -42,12 +42,15 @@ trap 'err_handler "$LINENO" "$?"' ERR
 ####################################################################################################################################################################
 MOGOOP_DIR=~/mogoop
 NO_DEDICATED_MASTER_HOST=1 # Don't use a separate machine for Jobtracker/Namenode
+PER_NODE_MAPPER_CORES=60
+PER_NODE_REDUCER_CORES=60
 
 # See https://mogon.zdv.uni-mainz.de/dokuwiki/local_scratch
 LSF_JOB_TEMP_DIR="/jobdir/$LSB_JOBID"
 
 NAMENODE_DATA_DIR="$LSF_JOB_TEMP_DIR/namenode-data"
 DATANODE_DATA_DIR="$LSF_JOB_TEMP_DIR/datanode-data"
+MAPRED_DATA_DIR="$LSF_JOB_TEMP_DIR/mapred-data"
 
 HADOOP_DIR="$MOGOOP_DIR/hadoop"
 HADOOP_MASTER_LIST="$HADOOP_DIR/conf/masters"
@@ -56,6 +59,8 @@ HADOOP_CORE_SITE_XML="$HADOOP_DIR/conf/core-site.xml"
 HADOOP_CORE_SITE_XML_TEMPLATE="./templates/hadoop-1.2.1/conf/core-site.xml"
 HADOOP_HDFS_SITE_XML="$HADOOP_DIR/conf/hdfs-site.xml"
 HADOOP_HDFS_SITE_XML_TEMPLATE="./templates/hadoop-1.2.1/conf/hdfs-site.xml"
+HADOOP_MAPRED_SITE_XML="$HADOOP_DIR/conf/mapred-site.xml"
+HADOOP_MAPRED_SITE_XML_TEMPLATE="./templates/hadoop-1.2.1/conf/mapred-site.xml"
 ####################################################################################################################################################################
 
 ####################################################################################################################################################################
@@ -103,6 +108,12 @@ main() {
 	
 	# Set datanode data dir
 	replace_string_in_file 'MOGOOP_DATANODE_DATA_DIR' "$DATANODE_DATA_DIR" "$HADOOP_HDFS_SITE_XML.temp" > "$HADOOP_HDFS_SITE_XML"
+	
+	# mapred-site.xml: Set ourself as jobtracker, data dir for mappers/reducers to tempspace, and number of mapper/reducer cores per node.
+	replace_string_in_file 'MOGOOP_JOBTRACKER' "$SELF" "$HADOOP_MAPRED_SITE_XML_TEMPLATE" > "$HADOOP_MAPRED_SITE_XML.temp1"
+	replace_string_in_file 'MOGOOP_MAPRED_DATA_DIR' "$MAPRED_DATA_DIR" "$HADOOP_MAPRED_SITE_XML.temp1" > "$HADOOP_MAPRED_SITE_XML.temp2"
+	replace_string_in_file 'MOGOOP_PER_NODE_MAPPER_CORES' "$PER_NODE_MAPPER_CORES" "$HADOOP_MAPRED_SITE_XML.temp2" > "$HADOOP_MAPRED_SITE_XML.temp3"
+	replace_string_in_file 'MOGOOP_PER_NODE_REDUCER_CORES' "$PER_NODE_REDUCER_CORES" "$HADOOP_MAPRED_SITE_XML.temp3" > "$HADOOP_MAPRED_SITE_XML"
 }
 
 get_hosts() {

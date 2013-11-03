@@ -4,5 +4,27 @@
 <!-- Put site-specific property overrides in this file. -->
 
 <configuration>
-
+	<property>
+		<name>mapred.job.tracker</name>
+		<value>MOGOOP_JOBTRACKER:8021</value>
+		<final>true</final>
+	</property>
+	
+	<property>
+		<name>mapred.local.dir</name>
+		<value>MOGOOP_MAPRED_DATA_DIR</value>
+		<final>true</final>
+	</property>
+	
+	<property>
+		<name>mapred.tasktracker.map.tasks.maximum</name>
+		<value>MOGOOP_PER_NODE_MAPPER_CORES</value>
+		<final>true</final>
+	</property>
+	
+	<property>
+		<name>mapred.tasktracker.reduce.tasks.maximum</name>
+		<value>MOGOOP_PER_NODE_REDUCER_CORES</value>
+		<final>true</final>
+	</property>
 </configuration>
