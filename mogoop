@@ -62,6 +62,8 @@ HADOOP_HDFS_SITE_XML="$HADOOP_DIR/conf/hdfs-site.xml"
 HADOOP_HDFS_SITE_XML_TEMPLATE="./templates/hadoop-1.2.1/conf/hdfs-site.xml"
 HADOOP_MAPRED_SITE_XML="$HADOOP_DIR/conf/mapred-site.xml"
 HADOOP_MAPRED_SITE_XML_TEMPLATE="./templates/hadoop-1.2.1/conf/mapred-site.xml"
+HADOOP_ENV_SH="$HADOOP_DIR/conf/hadoop-env.sh"
+HADOOP_ENV_SH_TEMPLATE="./templates/hadoop-1.2.1/conf/hadoop-env.sh"
 ####################################################################################################################################################################
 
 ####################################################################################################################################################################
@@ -113,7 +115,8 @@ main() {
 	replace_string_in_file 'MOGOOP_PER_NODE_MAPPER_CORES' "$PER_NODE_MAPPER_CORES" "$HADOOP_MAPRED_SITE_XML.temp2" > "$HADOOP_MAPRED_SITE_XML.temp3"
 	replace_string_in_file 'MOGOOP_PER_NODE_REDUCER_CORES' "$PER_NODE_REDUCER_CORES" "$HADOOP_MAPRED_SITE_XML.temp3" > "$HADOOP_MAPRED_SITE_XML"
 	
-	export JAVA_HOME
+	# hadoop-env.sh: Set JAVA_HOME. As of 2013-11-03, I tried using "export JAVA_HOME" but Hadoop didn't eat it.
+	replace_string_in_file 'MOGOOP_JAVA_HOME' "$JAVA_HOME" "$HADOOP_ENV_SH_TEMPLATE" > "$HADOOP_ENV_SH"
 
 	"$HADOOP_DIR/bin/start-dfs.sh"
 
