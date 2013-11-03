@@ -43,8 +43,8 @@ trap 'err_handler "$LINENO" "$?"' ERR
 JAVA_HOME=/usr/lib/jvm/jre-1.7.0-openjdk.x86_64
 MOGOOP_DIR=~/mogoop
 NO_DEDICATED_MASTER_HOST=1 # Don't use a separate machine for Jobtracker/Namenode
-PER_NODE_MAPPER_CORES=60	# TODO: Auto-config per machine via LSB_MCPU_HOSTS or estimate globally by taking LSB_DJOB_NUMPROC and dividing it by number of hosts
-PER_NODE_REDUCER_CORES=60	# TODO: Auto-config per machine via LSB_MCPU_HOSTS or estimate globally by taking LSB_DJOB_NUMPROC  and dividing it by number of hosts
+PER_NODE_MAPPER_CORES=60	# TODO: Auto-config per machine. The HOSTS array already stores CPU count for each.
+PER_NODE_REDUCER_CORES=60	# TODO: Auto-config per machine. The HOSTS array already stores CPU count for each.
 
 # See https://mogon.zdv.uni-mainz.de/dokuwiki/local_scratch
 LSF_JOB_TEMP_DIR="/jobdir/$LSB_JOBID"
@@ -67,7 +67,7 @@ HADOOP_MAPRED_SITE_XML_TEMPLATE="./templates/hadoop-1.2.1/conf/mapred-site.xml"
 ####################################################################################################################################################################
 # GLOBALS
 ####################################################################################################################################################################
-HOSTS=
+declare -A HOSTS	# key = hostname, value = cpu count
 HOST_SELF=
 ####################################################################################################################################################################
 
@@ -79,7 +79,6 @@ HOST_SELF=
 main() {
 	get_hosts
 
-	stdout "Machines: ${HOSTS[@]}"
 	stdout "Jobtracker / Namenode: $SELF"
 
 	# If configured, don't dedicate the whole local machine as Jobtracker/Namenode.
@@ -95,9 +94,9 @@ main() {
 	stdout "Secondary namenodes:" "$(<"$HADOOP_MASTER_LIST")"
 
 	# Set all remaining hosts as slave
-	stdout "Worker machines: ${HOSTS[@]}"
+	stdout "Worker machines: ${!HOSTS[@]}"
 	> "$HADOOP_SLAVE_LIST"
-	for host in "${HOSTS[@]}" ; do
+	for host in "${!HOSTS[@]}" ; do
 		stdout "$host" >> "$HADOOP_SLAVE_LIST"
 	done
     
@@ -127,21 +126,24 @@ main() {
 }
 
 get_hosts() {
-	# Get all hosts of the LSF job
-	read -ra HOSTS <<< "$LSB_HOSTS"
+	local -a hosts_temp
+	# Get all hosts of the LSF job. Its a list of pairs: First item = hostname, second = cpu count
+	read -ra hosts_temp <<< "$LSB_MCPU_HOSTS"
+
+	local i=0
+	for ((i=0; i < ${#hosts_temp[@]}; i+=2)) ; do
+		local host="${hosts_temp[$i]}"
+		local cpu_count="${hosts_temp[$(($i+1))]}"
+		HOSTS[$host]=$cpu_count
+		stdout "Host $host: $cpu_count cpus"
+	done
+
 	# Get host where this script is running
 	SELF="$(hostname --short)" # --short removes the domain name, which get_hosts_sorted won't include
 }
 
 remove_host() {
-	local to_remove="$1"
-	local new_hosts=( )
-
-    for host in "${HOSTS[@]}" ; do
-		[ "$host" != "$to_remove" ] && new_hosts+=( "$host" )
-	done
-
-	HOSTS=( "${new_hosts[@]}" )
+	unset "HOSTS[$1]"
 }
 
 # Inspired by http://mywiki.wooledge.org/BashFAQ/021
