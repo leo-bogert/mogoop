@@ -42,7 +42,12 @@ trap 'err_handler "$LINENO" "$?"' ERR
 ####################################################################################################################################################################
 MOGOOP_DIR=~/mogoop
 NO_DEDICATED_MASTER_HOST=1 # Don't use a separate machine for Jobtracker/Namenode
-NAMENODE_DATA_DIR="$MOGOOP_DIR/namenode-data"
+
+# See https://mogon.zdv.uni-mainz.de/dokuwiki/local_scratch
+MOGON_TEMP_JOB_DIR="/jobdir/$LSB_JOBID"
+
+NAMENODE_DATA_DIR="$LSF_JOB_TEMPDIR/namenode-data"
+DATANODE_DATA_DIR="$LSF_JOB_TEMPDIR/datanode-data"
 
 HADOOP_DIR="$MOGOOP_DIR/hadoop"
 HADOOP_MASTER_LIST="$HADOOP_DIR/conf/masters"
@@ -92,6 +97,12 @@ main() {
     
 	# Set ourself as namenode
 	replace_string_in_file 'MOGOOP_NAMENODE' "$SELF" "$HADOOP_CORE_SITE_XML_TEMPLATE" > "$HADOOP_CORE_SITE_XML"
+	
+	# Set namenode data dir
+	replace_string_in_file 'MOGOOP_NAMENODE_DATA_DIR' "$NAMENODE_DATA_DIR" "$HADOOP_HDFS_SITE_XML_TEMPLATE" > "$HADOOP_HDFS_SITE_XML.temp"
+	
+	# Set datanode data dir
+	replace_string_in_file 'MOGOOP_DATANODE_DATA_DIR' "$DATANODE_DATA_DIR" "$HADOOP_HDFS_SITE_XML.temp" > "$HADOOP_HDFS_SITE_XML"
 }
 
 get_hosts() {
