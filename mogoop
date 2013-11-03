@@ -85,7 +85,7 @@ main() {
 	# Multiplied by our 64 processes we get almost all of the memory and leave some of it for the operating system.
 	# We need to allow the processes to actually use that limit with "-M": It sets the per-process memory limit.
 	# To be graceful, we allow four times the 1800 MiB per process in case some instances need a bit more.
-	bsub -I -n $(($node_count*64)) -R 'span[ptile=64]' -app Reserve1800M -M $((4*1800*1024)) -q long "$0" "RUN_MAIN_NODE" "$@"
+	bsub -I -n $(($node_count*64)) -R 'span[ptile=64]' -app Reserve1800M -M $((4*1800*1024)) -q short "$0" "RUN_MAIN_NODE" "$@"
 }
 
 # Run via LSF on the master node. Starts namenode, datanodes, jobtracker, etc. Then opens a shell so the user can use hadoop.
