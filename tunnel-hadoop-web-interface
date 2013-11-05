@@ -1,0 +1,16 @@
+#!/bin/bash
+
+if [ $# -ne 2 ] ; then
+	echo "Syntax: $0 zdv_username hadoop_jobtracker_hostname"
+	exit 1
+fi
+
+ZDV_USER="$1"
+HADOOP_JOBTRACKER="$2"
+LOCAL_PORT='50030'
+
+echo "Enter your SSH passwort for Mogon please."
+echo "Afterwards, you can access the Hadoop web interface on http://localhost:50030"
+echo "Press CTRL+C to quit."
+
+ssh -N -L "localhost:$LOCAL_PORT:$HADOOP_JOBTRACKER:50030" "$ZDV_USER"@mogon.zdv.uni-mainz.de
