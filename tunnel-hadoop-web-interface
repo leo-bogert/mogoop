@@ -9,7 +9,7 @@ ZDV_USER="$1"
 HADOOP_JOBTRACKER="$2"
 LOCAL_PORT='50030'
 
-echo "Enter your SSH passwort for Mogon please."
+echo "Enter your SSH password for Mogon please."
 echo "Afterwards, you can access the Hadoop web interface on http://localhost:50030"
 echo "Press CTRL+C to quit."
 
