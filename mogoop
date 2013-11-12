@@ -83,9 +83,11 @@ main() {
 	# Each Mogon node has 64 CPUs and 128 GiB of RAM. We reserve all CPUs by stating that we run 64 processes.
 	# The Reserve1800M profile will reserve 1800 MiB per process (yes, MiB, not MB). 
 	# Multiplied by our 64 processes we get almost all of the memory and leave some of it for the operating system.
-	# We need to allow the processes to actually use that limit with "-M": It sets the per-process memory limit.
-	# To be graceful, we allow four times the 1800 MiB per process in case some instances need a bit more.
-	bsub -I -n $(($node_count*64)) -R 'span[ptile=64]' -app Reserve1800M -M $((4*1800*1024)) -q short "$0" "RUN_MAIN_NODE" "$@"
+	# We need to allow the processes to actually use that limit with "-M": It sets the per-process memory limit
+	# We just allow each process to use the whole memory because it is difficult to predict how much they will actually use.
+	# Making them not exhaust the machine's memory is up to the developer of the actual Hadoop jobs
+	local core_count=64
+	bsub -I -n $(($node_count*$core_count)) -R "span[ptile=$core_count]" -app Reserve1800M -M $(($core_count*1800*1024)) -q short "$0" "RUN_MAIN_NODE" "$@"
 }
 
 # Run via LSF on the master node. Starts namenode, datanodes, jobtracker, etc. Then opens a shell so the user can use hadoop.
